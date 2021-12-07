@@ -1,11 +1,33 @@
 ---
-- hosts: all
+- name: Fill motd file with host data
+  hosts: all
   become: true
   tasks:
+    - template:
+        src: motd.j2
+        dest: /etc/motd
+        owner: root
+        group: root
 
-  - name: install python3 and pip3
-    apt:
-      name:
-        - python3.8
-        - python3-pip
-      state: latest
+    - name: install python3 and pip3
+      apt:
+        name:
+          - python3.8
+          - python3-pip
+        state: latest
+
+    - name: install java
+      apt:
+        name: openjdk-11-jdk
+  
+    - name: Create a new user
+      user:
+         name: ryan
+         password: '$6$BnAj11hVFjPHc$g6np43AOr5g3/zf9eghfUUeUVjzIJCnzJzKMbmkXM1ppd892O2jGj8UNWzRF.xwQvW1howba3QZh0Kc7Fdwdn1
+'
+         groups:
+         state: present
+         shell: /bin/bash
+         system: no
+         createhome: yes
+         home: /home/test
